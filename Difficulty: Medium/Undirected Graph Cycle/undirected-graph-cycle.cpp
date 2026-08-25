@@ -1,31 +1,14 @@
 class Solution {
   public:
 
-      bool bfs(int i, vector<vector<int>>& adjList, vector<int>& States) {
-
+      bool dfs(int i, int parent, vector<vector<int>>& adjList, vector<int>& States) {
           States[i] = 1;
-
-          queue<pair<int, int>> q;
-          q.push({i, -1});
-
-          while (!q.empty()) {
-
-              int node = q.front().first;
-              int parent = q.front().second;
-              q.pop();
-
-              for (auto adj : adjList[node]) {
-
-                  // Unvisited node
-                  if (States[adj] == 0) {
-                      States[adj] = 1;
-                      q.push({adj, node});
-                  }
-
-                  // Already visited and not parent
-                  else if (parent != adj) {
-                      return true;
-                  }
+          
+          for(auto it : adjList[i]){
+              if(States[it] == 0){
+                  if(dfs(it,i,adjList,States)) return true;
+              }else if(parent != it){
+                  return true;
               }
           }
 
@@ -54,7 +37,7 @@ class Solution {
 
               if (States[i] == 0) {
 
-                  if (bfs(i, adjList, States))
+                  if (dfs(i,-1, adjList, States))
                       return true;
               }
           }
